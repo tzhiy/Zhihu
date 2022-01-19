@@ -2,14 +2,26 @@
   <div class="container">
     <GlobalHeader :user="currentUser" />
     <ColumnList :list="list" />
+    <form action="">
+      <div class="mb-3">
+        <label class="form-label">邮箱地址</label>
+        <ValidateInput
+          :rules="emailRules"
+          type="text"
+          placeholder="请输入邮箱地址"
+          v-model="emailVal"
+        ></ValidateInput>
+      </div>
+    </form>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ColumnList, { ColumnProps } from "./components/ColumnList.vue";
 import GlobalHeader, { UserProps } from "./components/GlobalHeader.vue";
+import ValidateInput, { RulesProp } from "./components/ValidateInput.vue";
 const currentUser: UserProps = {
   isLogin: true,
   name: "paddi",
@@ -47,11 +59,19 @@ export default defineComponent({
   components: {
     ColumnList,
     GlobalHeader,
+    ValidateInput,
   },
   setup() {
+    const emailVal = ref("Paddi");
+    const emailRules: RulesProp = [
+      { type: "required", message: "电子邮箱地址不能为空" },
+      { type: "email", message: "请输入正确的电子邮箱格式" },
+    ];
     return {
       list: testData,
       currentUser,
+      emailRules,
+      emailVal,
     };
   },
 });
